@@ -1,1 +1,1 @@
-# free_rtos
+# this project is used to porting freertos9.0 on mini stm32f103rct6 development board (start from two leds tasks)
