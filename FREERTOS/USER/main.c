@@ -2,35 +2,18 @@
 #include "task.h"
 #include "queue.h"
 #include "misc.h"
+#include "led.h"
 
 
 void LED0_Task(void * pvParameters);
 void LED1_Task(void * pvParameters);
 
+static void preSetupHardware(void);
 
-
-void LED_Init(){
-	
-	GPIO_InitTypeDef  LED0;
-	GPIO_InitTypeDef	LED1;
-	
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
-	LED0.GPIO_Pin = GPIO_Pin_8;
-	LED0.GPIO_Mode = GPIO_Mode_Out_PP;
-	LED0.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA,&LED0);
-	GPIO_SetBits(GPIOA,GPIO_Pin_8);
-	
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD,ENABLE);
-	LED1.GPIO_Pin = GPIO_Pin_2;
-	LED1.GPIO_Mode = GPIO_Mode_Out_PP;
-	LED1.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOD,&LED1);
-	GPIO_SetBits(GPIOD,GPIO_Pin_2);
-}
 
 int main(void)
 {
+	  preSetupHardware();
     LED_Init();
 
     xTaskCreate(LED0_Task, (const char *)"LED0", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 3, NULL);
@@ -58,4 +41,7 @@ void LED1_Task(void * pvParameters)
 				GPIOD->ODR ^= GPIO_Pin_2;
         vTaskDelay(500 / portTICK_RATE_MS);
     }
+}
+
+static void preSetupHardware(void){
 }
