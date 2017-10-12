@@ -3,8 +3,6 @@
 #include "misc.h"
 
 
-
-
 void LED_Init(void){
 	
 	GPIO_InitTypeDef  LED0;
