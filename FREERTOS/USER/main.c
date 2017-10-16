@@ -2,9 +2,11 @@
 #include "task.h"
 #include "queue.h"
 #include "misc.h"
+#include "predefines.h"
 #include "led.h"
 #include "nrf24.h"
 #include "nrf24_tx_task.h"
+#include "nrf24_rx_task.h"
 
 
 void LED0_Task(void * pvParameters);
@@ -24,8 +26,11 @@ int main(void)
     xTaskCreate(LED0_Task, (const char *)"LED0", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(LED1_Task, (const char *)"LED1", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
 
+#ifdef TRANSMIT_MODE
 		xTaskCreate(NRF24TX_Task, (const char *)"NRF24TX_Task", 512, NULL, configMAX_PRIORITIES - 1, NULL);
-	
+#else	
+		xTaskCreate(NRF24RX_Task, (const char *)"NRF24RX_Task", 512, NULL, configMAX_PRIORITIES - 1, NULL);
+#endif	
     vTaskStartScheduler();
 }
 
