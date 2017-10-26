@@ -7,6 +7,7 @@
 #include "nrf24.h"
 #include "nrf24_tx_task.h"
 #include "nrf24_rx_task.h"
+#include "key_handler.h"
 
 
 void LED0_Task(void * pvParameters);
@@ -22,6 +23,7 @@ int main(void)
 	  preSetupHardware();
     LED_Init();
 		NRF_GPIO_Init();
+		EXTI_KEY_Configuration();
 
     xTaskCreate(LED0_Task, (const char *)"LED0", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(LED1_Task, (const char *)"LED1", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
@@ -61,6 +63,8 @@ void NRF_GPIO_Init(void){
 	GPIO_InitTypeDef nrf24_irq;
 	GPIO_InitTypeDef nrf24_spi;
 	
+	GPIO_InitTypeDef key0_exti;
+	
 	SPI_InitTypeDef	 SPI;
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
@@ -72,6 +76,13 @@ void NRF_GPIO_Init(void){
 	nrf24_irq.GPIO_Speed = GPIO_Speed_2MHz;
 	nrf24_irq.GPIO_Pin = nRF24_IRQ_PIN;
 	GPIO_Init(nRF24_IRQ_PORT,&nrf24_irq);
+	
+	//configure key0 EXTI interrupt
+	key0_exti.GPIO_Mode = GPIO_Mode_IPU;
+	//key0_exti.GPIO_Speed = GPIO_Speed_50MHz;
+	key0_exti.GPIO_Pin = GPIO_Pin_1;
+	GPIO_Init(GPIOC,&key0_exti);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_AFIO,ENABLE);
 	
 	//configure spi1 pins
 	nrf24_spi.GPIO_Mode = GPIO_Mode_AF_PP;
