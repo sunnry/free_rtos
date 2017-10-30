@@ -1,7 +1,10 @@
 #include "led.h"
 #include "FreeRTOS.h"
+#include "task.h"
 #include "misc.h"
+#include "semphr.h"
 
+extern SemaphoreHandle_t  key_xSemaphore;
 
 void LED_Init(void){
 	
@@ -22,3 +25,25 @@ void LED_Init(void){
 	GPIO_Init(GPIOD,&LED1);
 	GPIO_SetBits(GPIOD,GPIO_Pin_2);
 }
+
+void LED0_Task(void * pvParameters)
+{
+    while (1)
+    {
+				if(xSemaphoreTake(key_xSemaphore,portMAX_DELAY) == pdTRUE){
+					GPIOA->ODR ^= GPIO_Pin_8;
+					//vTaskDelay(800 / portTICK_RATE_MS);
+				}
+    }
+}
+
+void LED1_Task(void * pvParameters)
+{
+    while (1)
+    {
+			  //GPIO_SetBits(GPIOA,GPIO_Pin_2);
+				GPIOD->ODR ^= GPIO_Pin_2;
+        vTaskDelay(500 / portTICK_RATE_MS);
+    }
+}
+

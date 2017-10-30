@@ -2,6 +2,7 @@
 #include "task.h"
 #include "queue.h"
 #include "misc.h"
+#include "semphr.h"
 #include "predefines.h"
 #include "led.h"
 #include "nrf24.h"
@@ -17,6 +18,7 @@ static void preSetupHardware(void);
 
 static void NRF_GPIO_Init(void);
 
+SemaphoreHandle_t  key_xSemaphore;
 
 int main(void)
 {
@@ -24,6 +26,8 @@ int main(void)
     LED_Init();
 		NRF_GPIO_Init();
 		EXTI_KEY_Configuration();
+	
+		key_xSemaphore = xSemaphoreCreateBinary();
 
     xTaskCreate(LED0_Task, (const char *)"LED0", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(LED1_Task, (const char *)"LED1", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
@@ -36,27 +40,6 @@ int main(void)
     vTaskStartScheduler();
 }
 
-
-
-void LED0_Task(void * pvParameters)
-{
-    while (1)
-    {
-			  //GPIO_ResetBits(GPIOA,GPIO_Pin_8);
-				GPIOA->ODR ^= GPIO_Pin_8;
-        vTaskDelay(800 / portTICK_RATE_MS);
-    }
-}
-
-void LED1_Task(void * pvParameters)
-{
-    while (1)
-    {
-			  //GPIO_SetBits(GPIOA,GPIO_Pin_8);
-				GPIOD->ODR ^= GPIO_Pin_2;
-        vTaskDelay(500 / portTICK_RATE_MS);
-    }
-}
 
 void NRF_GPIO_Init(void){	
 	
