@@ -9,6 +9,7 @@
 #include "nrf24_tx_task.h"
 #include "nrf24_rx_task.h"
 #include "key_handler.h"
+#include "timer_handler.h"
 
 
 void LED0_Task(void * pvParameters);
@@ -25,7 +26,10 @@ int main(void)
 	  preSetupHardware();
     LED_Init();
 		NRF_GPIO_Init();
-		EXTI_KEY_Configuration();
+		//EXTI_KEY_Configuration();
+		TIMER3_RCC_Configuration();
+		TIMER3_Configuration();
+		NVIC_TIMER3_Configuration();
 	
 		key_xSemaphore = xSemaphoreCreateBinary();
 

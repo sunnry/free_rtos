@@ -424,6 +424,11 @@
               <FileType>1</FileType>
               <FilePath>.\key_handler.c</FilePath>
             </File>
+            <File>
+              <FileName>timer_handler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\timer_handler.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

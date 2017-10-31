@@ -18,12 +18,11 @@ void EXTI_KEY_Configuration(void){
 	EXTI1_key0_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
 	EXTI1_key0_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
 	EXTI1_key0_InitStructure.EXTI_LineCmd = ENABLE;
-	
 	EXTI_Init(&EXTI1_key0_InitStructure);
 	
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI1_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x2;  //数字越小优先级越高
-	//NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x2;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x2;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	
