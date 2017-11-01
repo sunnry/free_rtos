@@ -6,7 +6,7 @@
 
 extern SemaphoreHandle_t  key_xSemaphore;
 
-void LED_Init(void){
+void LED_GPIO_Init(void){
 	
 	GPIO_InitTypeDef  LED0;
 	GPIO_InitTypeDef	LED1;

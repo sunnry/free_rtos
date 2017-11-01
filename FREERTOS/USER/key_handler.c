@@ -7,7 +7,17 @@
 
 extern SemaphoreHandle_t  key_xSemaphore;
 
-void EXTI_KEY_Configuration(void){
+void EXTI_KEY0_GPIO_Init(void){
+
+	GPIO_InitTypeDef key0_exti;
+
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_AFIO,ENABLE);	
+	key0_exti.GPIO_Mode = GPIO_Mode_IPU;
+	key0_exti.GPIO_Pin = GPIO_Pin_1;
+	GPIO_Init(GPIOC,&key0_exti);
+}
+
+void EXTI_KEY0_Configuration(void){
 	
 	EXTI_InitTypeDef	EXTI1_key0_InitStructure;
 	

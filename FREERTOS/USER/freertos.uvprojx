@@ -400,6 +400,11 @@
               <FilePath>.\led.c</FilePath>
             </File>
             <File>
+              <FileName>nrf24_handler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\nrf24_handler.c</FilePath>
+            </File>
+            <File>
               <FileName>nrf24.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\nrf24.c</FilePath>
