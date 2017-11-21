@@ -395,11 +395,6 @@
               <FilePath>.\system_stm32f10x.c</FilePath>
             </File>
             <File>
-              <FileName>led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\led.c</FilePath>
-            </File>
-            <File>
               <FileName>nrf24_handler.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\nrf24_handler.c</FilePath>
@@ -423,6 +418,11 @@
               <FileName>nrf24_rx_task.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\nrf24_rx_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\led.c</FilePath>
             </File>
             <File>
               <FileName>key_handler.c</FileName>

@@ -2,6 +2,9 @@
 #include "semphr.h"
 #include "timer_handler.h"
 #include "stm32f10x_tim.h"
+#include "protocol.h"
+
+extern QueueHandle_t  userInputQueueHandler;
 
 extern SemaphoreHandle_t  key_xSemaphore;
 
@@ -42,18 +45,29 @@ void NVIC_TIMER3_Configuration(void){
 
 void TIM3_IRQHandler(void){
 	
+	static struct ControlFrameCtx ctx;
+	BaseType_t pxHigherPriorityTaskWoken;
 	BaseType_t xHigherPriorityTaskWoken;
+	
+	pxHigherPriorityTaskWoken = pdFALSE;
 	xHigherPriorityTaskWoken = pdFALSE;
 	
-	TIM_ClearITPendingBit(TIM3, TIM_IT_Update);  
-  if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_1)==Bit_RESET)  
-  {  
+	TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
+  
+  if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_1)==Bit_RESET){
 		kcount ++;
 		
 		if(kcount >= KEY_DETECT_TIMES){
 			xSemaphoreGiveFromISR(key_xSemaphore,&xHigherPriorityTaskWoken);
 			kcount = 0;
-		} 
-  }  
+		}
+		ctx.FrontLight = 0x1;
+  }else{
+		kcount = 0;
+		ctx.FrontLight = 0x0;
+	}
+	
+	if(userInputQueueHandler != NULL)
+		xQueueSendToBackFromISR(userInputQueueHandler,&ctx,&pxHigherPriorityTaskWoken);
 }
 

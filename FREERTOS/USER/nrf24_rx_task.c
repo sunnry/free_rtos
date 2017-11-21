@@ -4,13 +4,14 @@
 #include "misc.h"
 #include "nrf24.h"
 #include "nrf24_rx_task.h"
+#include "protocol.h"
 
 
 
 void NRF24RX_Task(void * pvParameters){
 	
-		static const uint8_t nRF24_ADDR[] = { 'E', 'S', 'B' };
-		uint8_t nRF24_payload[32];
+		static const uint8_t nRF24_ADDR[] = { 'M', 'A', 'S' };
+		uint8_t nRF24_payload[PAYLOAD_LENGTH];
 		uint8_t payload_length;
 		//nRF24_RXResult pipe;
 	
@@ -38,7 +39,7 @@ void NRF24RX_Task(void * pvParameters){
     // The main loop
     for (;;) {
 			int i = 0;
-			for(i=0;i<payload_length;i++){
+			for(i=0;i<PAYLOAD_LENGTH;i++){
 				nRF24_payload[i] = 0;
 			}
     	//
@@ -59,6 +60,8 @@ void NRF24RX_Task(void * pvParameters){
 			//UART_SendStr(" PAYLOAD:>");
 			//UART_SendBufHex((char *)nRF24_payload, payload_length);
 			//UART_SendStr("<\r\n");
+				if(nRF24_payload[0] == 0x5A){
+				}
     	}
 			
 			vTaskDelay(3 / portTICK_PERIOD_MS);  //delay 3ms

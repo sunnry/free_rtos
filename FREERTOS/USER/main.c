@@ -11,24 +11,34 @@
 #include "nrf24_rx_task.h"
 #include "key_handler.h"
 #include "timer_handler.h"
-
-
-static void preSetupHardware(void);
+#include "protocol.h"
 
 SemaphoreHandle_t  key_xSemaphore;
 
+QueueHandle_t  userInputQueueHandler = NULL;
+
+static void preSetupHardware(void);
+
+QueueHandle_t createRequiredQueue(void){
+	return xQueueCreate(1,sizeof(struct ControlFrameCtx));
+}
+
+
+
 int main(void)
 {
+		userInputQueueHandler = createRequiredQueue();
+	
 	  preSetupHardware();
 	
     LED_GPIO_Init();
 	
 		NRF_GPIO_Init();
 	
-		EXTI_KEY0_GPIO_Init();
-		EXTI_KEY0_Configuration();
+		//EXTI_KEY0_GPIO_Init();  //this two lines of code use external interput to handle key press
+		//EXTI_KEY0_Configuration();   
 	
-		TIMER3_RCC_Configuration();
+		TIMER3_RCC_Configuration();  //this three lines of code use timer3 interrupt to handle key press  
 		TIMER3_Configuration();
 		NVIC_TIMER3_Configuration();
 	

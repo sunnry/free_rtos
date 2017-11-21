@@ -9,7 +9,7 @@
 																//you debug handshake between TX and RX, make sure to mark this MACRO, because
 																//if you open this, it will disable auto-ACK and resender and make handshake failed
 
-//#define		TRANSMIT_MODE			1   //if TRANSMIT_MODE defined as 1 = tx mode, if not defined rx mode
+#define		TRANSMIT_MODE			1   //if TRANSMIT_MODE defined as 1 = tx mode, if not defined rx mode
 
 #endif
 

@@ -4,15 +4,24 @@
 #include "misc.h"
 #include "nrf24.h"
 #include "nrf24_tx_task.h"
+#include "protocol.h"
 
+
+extern QueueHandle_t  userInputQueueHandler;
+
+/*
+frame format:  HEADER  FRONT_LIGHT  TAIL_LIGHT  LEFT_THRUTTLE  RIGHT_THRUTTLE		 TAIL
+								0x5A       0x0				  0x0					 0x0						 0x0			   0xA5
+*/
 
 void NRF24TX_Task(void * pvParameters){
 		
   /*configure nrf24 transmit parameters*/	
+	static struct ControlFrameCtx ctx;
 	static nRF24_TXResult tx_res;
-	static const uint8_t nRF24_ADDR[] = {'E','S','B'};
-	uint8_t payload_length = 10;
-	uint8_t nrf24_payload[10] = {'i',' ','l','o','v','e',' ','s','t','m'};
+	static const uint8_t nRF24_ADDR[] = {'M','A','S'};
+	uint8_t payload_length = PAYLOAD_LENGTH;
+	uint8_t nrf24_payload[PAYLOAD_LENGTH] = {0x5A,0x0,0x0,0x0,0x0,0xA5};
 	
 	nRF24_SetRFChannel(40);  
 	nRF24_SetDataRate(nRF24_DR_250kbps);
@@ -42,6 +51,14 @@ void NRF24TX_Task(void * pvParameters){
 
 	
 	for(;;){
+		
+		if(userInputQueueHandler != NULL)
+			xQueueReceive(userInputQueueHandler,&ctx,0);
+		
+			nrf24_payload[1] = ctx.FrontLight; 
+			nrf24_payload[2] = ctx.TailLight;
+			nrf24_payload[3] = ctx.LeftThruttle;
+			nrf24_payload[4] = ctx.RightThruttle;
 		
 		tx_res = nRF24_TransmitPacket(nrf24_payload, payload_length);
 		
