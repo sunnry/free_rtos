@@ -25,16 +25,16 @@ int main(void)
 	
 		NRF_GPIO_Init();
 	
-		EXTI_KEY0_GPIO_Init();
-		EXTI_KEY0_Configuration();
+//		EXTI_KEY0_GPIO_Init();
+//		EXTI_KEY0_Configuration();
 	
-		TIMER3_RCC_Configuration();
-		TIMER3_Configuration();
-		NVIC_TIMER3_Configuration();
+//		TIMER3_RCC_Configuration();
+//		TIMER3_Configuration();
+//		NVIC_TIMER3_Configuration();
 	
 		key_xSemaphore = xSemaphoreCreateBinary();
 
-    xTaskCreate(LED0_Task, (const char *)"LED0", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
+    //xTaskCreate(LED0_Task, (const char *)"LED0", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(LED1_Task, (const char *)"LED1", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
 
 #ifdef TRANSMIT_MODE
